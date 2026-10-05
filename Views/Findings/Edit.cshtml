@@ -1,0 +1,9 @@
+@model MedicalDeviceSafetyPlatform.ViewModels.FindingFormViewModel
+@{ ViewData["Title"] = "Edit Finding"; }
+<h1>Edit Finding</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <partial name="_FindingForm" model="Model" />
+    <button type="submit" class="btn btn-primary">Save changes</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,9 @@
+@model MedicalDeviceSafetyPlatform.ViewModels.FindingFormViewModel
+@{ ViewData["Title"] = "Add Finding"; }
+<h1>Add Employee Finding</h1>
+<p>Record your risk-review analysis for the selected notice.</p>
+<form asp-action="Create" method="post">
+    <partial name="_FindingForm" model="Model" />
+    <button type="submit" class="btn btn-primary">Save finding</button>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
