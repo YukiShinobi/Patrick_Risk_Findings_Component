@@ -14,3 +14,10 @@ ASP.NET Core MVC component for recording and managing employee risk-review findi
 
 ## Integration
 The component is intended for the shared ASP.NET Core MVC application and expects the shared `SafetyNotice`, `ApplicationUser`, `ApplicationDbContext`, ASP.NET Core Identity, and an `Employee` role. Align namespaces/property names, add the Finding/Comment mappings to the existing DbContext, create the EF Core migration, and run the documented tests against the integrated application.
+
+
+## Scope and maintenance — October 2026
+
+An ASP.NET Core MVC component designed for integration into a host application's employee risk-review workflow. It is not a standalone clinical or recall-management system; verify shared identity, EF Core migrations and user ownership controls during integration.
+
+Related projects: [Project Creation](https://github.com/YukiShinobi/project-creation), [Veyra](https://github.com/YukiShinobi/YukiShinobi-veyra), [Simply Management](https://github.com/YukiShinobi/SIMPLYMANAGEMENT-WEBSITE). Documentation is not an assertion of a verified live deployment.
