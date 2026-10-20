@@ -11,6 +11,7 @@ public class FindingFormViewModel
     public int? Id { get; set; }
 
     [Required]
+    [Range(1, int.MaxValue, ErrorMessage = "Select a valid safety or recall notice.")]
     public int SafetyNoticeId { get; set; }
 
     [Required, StringLength(150)]
@@ -21,12 +22,16 @@ public class FindingFormViewModel
     [Display(Name = "Risk-review analysis")]
     public string Analysis { get; set; } = string.Empty;
 
-    [Required]
+    [EnumDataType(typeof(FindingRelevance), ErrorMessage = "Select a valid relevance level.")]
+    [Display(Name = "Relevance")]
     public FindingRelevance Relevance { get; set; }
 
-    [Required]
+    [EnumDataType(typeof(FindingStatus), ErrorMessage = "Select a valid finding status.")]
+    [Display(Name = "Status")]
     public FindingStatus Status { get; set; } = FindingStatus.Open;
 
+    // Required for edits when the host database provider supports the configured
+    // timestamp/row-version concurrency token. Create requests do not have one yet.
     public byte[]? RowVersion { get; set; }
 
     // Display-only information supplied by the controller.
