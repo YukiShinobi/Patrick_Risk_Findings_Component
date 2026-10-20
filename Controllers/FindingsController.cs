@@ -177,7 +177,18 @@ public class FindingsController : Controller
             return View(model);
         }
 
-        _context.Entry(finding).Property(f => f.RowVersion).OriginalValue = model.RowVersion!;
+        // A missing token must not silently bypass optimistic concurrency checks.
+        // The database provider must support the configured [Timestamp] mapping.
+        if (model.RowVersion is null || model.RowVersion.Length == 0)
+        {
+            ModelState.AddModelError(string.Empty,
+                "The edit token is missing. Reload this finding before saving your changes.");
+            model.NoticeReference = finding.SafetyNotice?.Reference ?? string.Empty;
+            model.DeviceName = finding.SafetyNotice?.DeviceName ?? string.Empty;
+            return View(model);
+        }
+
+        _context.Entry(finding).Property(f => f.RowVersion).OriginalValue = model.RowVersion;
 
         finding.Title = model.Title.Trim();
         finding.Analysis = model.Analysis.Trim();
