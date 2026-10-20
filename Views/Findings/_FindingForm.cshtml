@@ -6,6 +6,7 @@
 
 <div class="alert alert-secondary">
     <strong>@Model.NoticeReference</strong> — @Model.DeviceName
+    <div><span asp-validation-for="SafetyNoticeId" class="text-danger"></span></div>
 </div>
 
 <div class="mb-3">
@@ -22,9 +23,11 @@
     <div class="col-md-6 mb-3">
         <label asp-for="Relevance" class="form-label"></label>
         <select asp-for="Relevance" asp-items="Html.GetEnumSelectList<MedicalDeviceSafetyPlatform.Models.FindingRelevance>()" class="form-select"></select>
+        <span asp-validation-for="Relevance" class="text-danger"></span>
     </div>
     <div class="col-md-6 mb-3">
         <label asp-for="Status" class="form-label"></label>
         <select asp-for="Status" asp-items="Html.GetEnumSelectList<MedicalDeviceSafetyPlatform.Models.FindingStatus>()" class="form-select"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 </div>
