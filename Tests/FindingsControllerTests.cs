@@ -1,49 +1,109 @@
-// Integration-test outline for Patrick's component.
-// Adapt the test fixture to the team's final ApplicationDbContext/authentication setup.
-
+using System.ComponentModel.DataAnnotations;
+using MedicalDeviceSafetyPlatform.Models;
+using MedicalDeviceSafetyPlatform.ViewModels;
 using Xunit;
 
 namespace MedicalDeviceSafetyPlatform.Tests;
 
-public class FindingsControllerTests
+/// <summary>
+/// Executable unit tests for form-level validation. Controller/database integration
+/// tests still need a fixture based on the final host application's DbContext and auth setup.
+/// </summary>
+public class FindingFormViewModelValidationTests
 {
     [Fact]
-    public void US08_CreateFinding_RequiresValidInput()
+    public void ValidForm_HasNoValidationErrors()
     {
-        // Arrange: authenticated employee + existing SafetyNotice.
-        // Act: submit empty/invalid required fields.
-        // Assert: ModelState invalid and no Finding is persisted.
+        var model = new FindingFormViewModel
+        {
+            SafetyNoticeId = 1,
+            Title = "Packaging risk review",
+            Analysis = "The packaging may be damaged during transport and requires review.",
+            Relevance = FindingRelevance.High,
+            Status = FindingStatus.Open
+        };
+
+        Assert.Empty(Validate(model));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void BlankTitle_IsRejected(string title)
+    {
+        var model = ValidModel();
+        model.Title = title;
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.Title)));
     }
 
     [Fact]
-    public void US09_ValidFinding_IsPersisted()
+    public void TitleLongerThan150Characters_IsRejected()
     {
-        // Arrange: authenticated employee + existing SafetyNotice.
-        // Act: submit valid FindingFormViewModel.
-        // Assert: Finding exists in database and links to notice + employee.
+        var model = ValidModel();
+        model.Title = new string('x', 151);
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.Title)));
     }
 
     [Fact]
-    public void US10_Employee_CanEditOwnedFinding()
+    public void AnalysisShorterThan10Characters_IsRejected()
     {
-        // Arrange: finding owned by authenticated employee.
-        // Act: update title/analysis/relevance/status.
-        // Assert: values persist and UpdatedAtUtc changes.
+        var model = ValidModel();
+        model.Analysis = "Too short";
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.Analysis)));
     }
 
     [Fact]
-    public void US10_Employee_CannotAccessAnotherEmployeesFinding()
+    public void AnalysisLongerThan4000Characters_IsRejected()
     {
-        // Arrange: finding owned by a different employee.
-        // Act: request Details/Edit.
-        // Assert: NotFound result and data is not disclosed.
+        var model = ValidModel();
+        model.Analysis = new string('x', 4001);
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.Analysis)));
     }
 
     [Fact]
-    public void Comment_EmptyBody_IsRejected()
+    public void UndefinedRelevanceValue_IsRejected()
     {
-        // Arrange: owned finding.
-        // Act: post empty comment.
-        // Assert: no Comment is persisted.
+        var model = ValidModel();
+        model.Relevance = (FindingRelevance)999;
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.Relevance)));
+    }
+
+    [Fact]
+    public void UndefinedStatusValue_IsRejected()
+    {
+        var model = ValidModel();
+        model.Status = (FindingStatus)999;
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.Status)));
+    }
+
+    [Fact]
+    public void MissingSafetyNoticeId_IsRejected()
+    {
+        var model = ValidModel();
+        model.SafetyNoticeId = 0;
+
+        Assert.Contains(Validate(model), error => error.MemberNames.Contains(nameof(model.SafetyNoticeId)));
+    }
+
+    private static FindingFormViewModel ValidModel() => new()
+    {
+        SafetyNoticeId = 1,
+        Title = "Packaging risk review",
+        Analysis = "The packaging may be damaged during transport and requires review.",
+        Relevance = FindingRelevance.Medium,
+        Status = FindingStatus.Open
+    };
+
+    private static List<ValidationResult> Validate(object model)
+    {
+        var results = new List<ValidationResult>();
+        Validator.TryValidateObject(model, new ValidationContext(model), results, validateAllProperties: true);
+        return results;
     }
 }
