@@ -1,6 +1,6 @@
 # Risk Findings and Employee Comments — runnable individual demo
 
-This branch contains a **standalone local demonstration** of the individual ASP.NET Core MVC component, in addition to the original integration-ready controller, models, and views. It is not the team's combined application.
+This branch contains a **standalone local demonstration for patrick** the individual ASP.NET Core MVC component, in addition to the original integration-ready controller, models, and views. It is not the team's combined application.
 
 ## Requirements
 - Windows 10/11, macOS, or Linux
