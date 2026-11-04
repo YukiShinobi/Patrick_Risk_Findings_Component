@@ -1,0 +1,10 @@
+@model IEnumerable<MedicalDeviceSafetyPlatform.Models.SafetyNotice>
+@{ ViewData["Title"] = "Safety Notices"; }
+<h1>Safety Notices</h1>
+<p class="text-muted">Standalone local demonstration of the individual Risk Findings component.</p>
+@if (User.Identity?.IsAuthenticated != true) { <p><a asp-controller="Account" asp-action="Register">Create an employee account</a> to add findings.</p> }
+<table class="table table-striped"><thead><tr><th>Reference</th><th>Device</th><th></th></tr></thead><tbody>
+@foreach (var notice in Model) { <tr><td>@notice.Reference</td><td>@notice.DeviceName</td><td>
+<a asp-controller="Findings" asp-action="Create" asp-route-safetyNoticeId="@notice.Id" class="btn btn-primary btn-sm">Add finding</a>
+</td></tr> }
+</tbody></table>
