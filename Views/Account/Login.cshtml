@@ -1,9 +1,8 @@
 @model MedicalDeviceSafetyPlatform.Controllers.LoginInput
-@{ ViewData["Title"] = "Log in"; }
-<h1>Employee login</h1>
-<form asp-action="Login" method="post">
-<div asp-validation-summary="All" class="text-danger"></div>
-<input asp-for="ReturnUrl" type="hidden"/>
-<div class="mb-3"><label asp-for="Email"></label><input asp-for="Email" class="form-control"/></div>
-<div class="mb-3"><label asp-for="Password"></label><input asp-for="Password" type="password" class="form-control"/></div>
-<button class="btn btn-primary">Log in</button></form>
+@{ ViewData["Title"] = "Sign in"; }
+<div class="auth-card content-card"><div class="auth-symbol" aria-hidden="true">✚</div><div class="eyebrow">SECURE EMPLOYEE ACCESS</div><h1 class="page-title">Welcome back</h1><p class="page-subtitle">Sign in to manage your medical device risk assessments.</p>
+<form asp-action="Login" method="post"><div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div><input asp-for="ReturnUrl" type="hidden" />
+<div class="mb-3"><label asp-for="Email" class="form-label">Email address</label><input asp-for="Email" type="email" autocomplete="username" placeholder="name@example.com" class="form-control" required /><span asp-validation-for="Email" class="text-danger small"></span></div>
+<div class="mb-4"><label asp-for="Password" class="form-label">Password</label><input asp-for="Password" type="password" autocomplete="current-password" class="form-control" required /><span asp-validation-for="Password" class="text-danger small"></span></div>
+<button type="submit" class="btn btn-primary w-100">Sign in →</button></form>
+<p class="text-center text-secondary small mt-4 mb-0">New to MedSafe? <a asp-controller="Account" asp-action="Register">Create an account</a></p></div>
