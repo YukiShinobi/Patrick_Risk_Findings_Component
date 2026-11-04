@@ -1,0 +1,9 @@
+@model MedicalDeviceSafetyPlatform.Controllers.LoginInput
+@{ ViewData["Title"] = "Log in"; }
+<h1>Employee login</h1>
+<form asp-action="Login" method="post">
+<div asp-validation-summary="All" class="text-danger"></div>
+<input asp-for="ReturnUrl" type="hidden"/>
+<div class="mb-3"><label asp-for="Email"></label><input asp-for="Email" class="form-control"/></div>
+<div class="mb-3"><label asp-for="Password"></label><input asp-for="Password" type="password" class="form-control"/></div>
+<button class="btn btn-primary">Log in</button></form>
