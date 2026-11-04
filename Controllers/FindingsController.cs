@@ -107,7 +107,8 @@ public class FindingsController : Controller
             Relevance = model.Relevance,
             Status = model.Status,
             CreatedAtUtc = DateTime.UtcNow,
-            UpdatedAtUtc = DateTime.UtcNow
+            UpdatedAtUtc = DateTime.UtcNow,
+            RowVersion = Guid.NewGuid().ToByteArray()
         };
 
         try
@@ -177,13 +178,22 @@ public class FindingsController : Controller
             return View(model);
         }
 
-        _context.Entry(finding).Property(f => f.RowVersion).OriginalValue = model.RowVersion!;
+        if (model.RowVersion is null || model.RowVersion.Length != 16)
+        {
+            ModelState.AddModelError(string.Empty, "The edit token is missing. Reload this finding and try again.");
+            model.NoticeReference = finding.SafetyNotice?.Reference ?? string.Empty;
+            model.DeviceName = finding.SafetyNotice?.DeviceName ?? string.Empty;
+            return View(model);
+        }
+
+        _context.Entry(finding).Property(f => f.RowVersion).OriginalValue = model.RowVersion;
 
         finding.Title = model.Title.Trim();
         finding.Analysis = model.Analysis.Trim();
         finding.Relevance = model.Relevance;
         finding.Status = model.Status;
         finding.UpdatedAtUtc = DateTime.UtcNow;
+        finding.RowVersion = Guid.NewGuid().ToByteArray();
 
         try
         {
