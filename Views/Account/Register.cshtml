@@ -1,8 +1,68 @@
 @model MedicalDeviceSafetyPlatform.Controllers.RegisterInput
-@{ ViewData["Title"] = "Register"; }
-<h1>Register demo employee</h1>
-<form asp-action="Register" method="post">
-<div asp-validation-summary="All" class="text-danger"></div>
-<div class="mb-3"><label asp-for="Email"></label><input asp-for="Email" class="form-control"/></div>
-<div class="mb-3"><label asp-for="Password"></label><input asp-for="Password" type="password" class="form-control"/></div>
-<button class="btn btn-primary">Register</button></form>
+@{
+    ViewData["Title"] = "Create employee account";
+}
+<style>
+    .signup-wrap { max-width: 480px; margin: 2.5rem auto 4rem; }
+    .signup-card { border: 1px solid #e3e8ef; border-radius: 20px; padding: 2rem; box-shadow: 0 16px 44px rgba(15,23,42,.07); background: #fff; }
+    .signup-mark { display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:14px; background:#eaf1ff; color:#2447a8; font-size:1.5rem; margin-bottom:1rem; }
+    .signup-card h1 { font-size:1.65rem; font-weight:750; letter-spacing:-.035em; }
+    .signup-card .form-control { padding:.75rem .9rem; border-radius:10px; }
+    .signup-card .form-control:focus { border-color:#4569cc; box-shadow:0 0 0 .2rem rgba(69,105,204,.12); }
+    .signup-card .btn-primary { background:#2548ae; border-color:#2548ae; padding:.8rem; border-radius:10px; font-weight:650; }
+    .signup-hint { background:#f7f9fc; border:1px solid #e7ecf3; border-radius:12px; padding:1rem; }
+    .signup-hint ul { margin-bottom:0; padding-left:1.3rem; }
+    .signup-hint li { margin:.25rem 0; }
+    @@media (max-width:575px) { .signup-wrap { margin:1rem auto 2rem; } .signup-card { padding:1.3rem; } }
+</style>
+<div class="signup-wrap">
+    <div class="signup-card">
+        <div class="signup-mark" aria-hidden="true">✚</div>
+        <h1>Create your employee account</h1>
+        <p class="text-muted mb-4">Sign up to review medical device safety notices and manage your risk findings.</p>
+
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-semibold">Work email address</label>
+                <input asp-for="Email" type="email" class="form-control" autocomplete="email" placeholder="name@example.com" required />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label fw-semibold">Create password</label>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control" id="registerPassword" autocomplete="new-password" minlength="8" required aria-describedby="passwordHelp" />
+                    <button type="button" class="btn btn-outline-secondary" id="togglePassword" aria-label="Show password" aria-pressed="false">Show</button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <div class="signup-hint mb-4" id="passwordHelp">
+                <div class="fw-semibold mb-2">Your password needs:</div>
+                <ul class="small text-secondary">
+                    <li>At least 8 characters</li>
+                    <li>One uppercase letter (A–Z)</li>
+                    <li>One lowercase letter (a–z)</li>
+                    <li>One number (0–9)</li>
+                    <li>One special character (such as !, @@ or #)</li>
+                </ul>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Create account</button>
+        </form>
+        <p class="text-center text-muted small mt-4 mb-0">Already registered? <a asp-controller="Account" asp-action="Login" class="fw-semibold">Sign in</a></p>
+    </div>
+</div>
+@section Scripts {
+<script>
+    (() => {
+        const input = document.getElementById('registerPassword');
+        const toggle = document.getElementById('togglePassword');
+        toggle.addEventListener('click', () => {
+            const showing = input.type === 'password';
+            input.type = showing ? 'text' : 'password';
+            toggle.textContent = showing ? 'Hide' : 'Show';
+            toggle.setAttribute('aria-label', showing ? 'Hide password' : 'Show password');
+            toggle.setAttribute('aria-pressed', String(showing));
+        });
+    })();
+</script>
+}
