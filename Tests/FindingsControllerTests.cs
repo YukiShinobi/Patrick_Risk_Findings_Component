@@ -1,49 +1,89 @@
-// Integration-test outline for Patrick's component.
-// Adapt the test fixture to the team's final ApplicationDbContext/authentication setup.
-
+// Unit tests for the component's validation rules.
+// Requires the team's test project to reference this component and xUnit.
+// Controller/database integration tests still need the team's actual DbContext and Identity setup.
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using MedicalDeviceSafetyPlatform.Models;
+using MedicalDeviceSafetyPlatform.ViewModels;
 using Xunit;
 
 namespace MedicalDeviceSafetyPlatform.Tests;
 
-public class FindingsControllerTests
+public class FindingValidationTests
 {
-    [Fact]
-    public void US08_CreateFinding_RequiresValidInput()
+    private static List<ValidationResult> Validate(object instance)
     {
-        // Arrange: authenticated employee + existing SafetyNotice.
-        // Act: submit empty/invalid required fields.
-        // Assert: ModelState invalid and no Finding is persisted.
+        var errors = new List<ValidationResult>();
+        Validator.TryValidateObject(instance, new ValidationContext(instance), errors, validateAllProperties: true);
+        return errors;
+    }
+
+    private static FindingFormViewModel ValidForm() => new()
+    {
+        SafetyNoticeId = 1,
+        Title = "Risk review",
+        Analysis = "A sufficiently detailed risk assessment.",
+        Relevance = FindingRelevance.High,
+        Status = FindingStatus.Open
+    };
+
+    [Fact]
+    public void US08_ValidFindingForm_PassesValidation()
+        => Assert.Empty(Validate(ValidForm()));
+
+    [Fact]
+    public void US08_EmptyTitle_IsRejected()
+    {
+        var form = ValidForm();
+        form.Title = "";
+        Assert.NotEmpty(Validate(form));
     }
 
     [Fact]
-    public void US09_ValidFinding_IsPersisted()
+    public void US08_ShortAnalysis_IsRejected()
     {
-        // Arrange: authenticated employee + existing SafetyNotice.
-        // Act: submit valid FindingFormViewModel.
-        // Assert: Finding exists in database and links to notice + employee.
+        var form = ValidForm();
+        form.Analysis = "short";
+        Assert.NotEmpty(Validate(form));
     }
 
     [Fact]
-    public void US10_Employee_CanEditOwnedFinding()
+    public void US08_InvalidNoticeId_IsRejected()
     {
-        // Arrange: finding owned by authenticated employee.
-        // Act: update title/analysis/relevance/status.
-        // Assert: values persist and UpdatedAtUtc changes.
+        var form = ValidForm();
+        form.SafetyNoticeId = 0;
+        Assert.NotEmpty(Validate(form));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(99)]
+    public void US08_InvalidRelevance_IsRejected(int value)
+    {
+        var form = ValidForm();
+        form.Relevance = (FindingRelevance)value;
+        Assert.NotEmpty(Validate(form));
     }
 
     [Fact]
-    public void US10_Employee_CannotAccessAnotherEmployeesFinding()
+    public void US10_InvalidStatus_IsRejected()
     {
-        // Arrange: finding owned by a different employee.
-        // Act: request Details/Edit.
-        // Assert: NotFound result and data is not disclosed.
+        var form = ValidForm();
+        form.Status = (FindingStatus)999;
+        Assert.NotEmpty(Validate(form));
     }
 
     [Fact]
     public void Comment_EmptyBody_IsRejected()
     {
-        // Arrange: owned finding.
-        // Act: post empty comment.
-        // Assert: no Comment is persisted.
+        var comment = new Comment { FindingId = 1, AuthorId = "employee-1", Body = "" };
+        Assert.NotEmpty(Validate(comment));
+    }
+
+    [Fact]
+    public void Comment_OverlongBody_IsRejected()
+    {
+        var comment = new Comment { FindingId = 1, AuthorId = "employee-1", Body = new string('x', 1501) };
+        Assert.NotEmpty(Validate(comment));
     }
 }
