@@ -1,34 +1,21 @@
 @model IEnumerable<MedicalDeviceSafetyPlatform.Models.Finding>
-@{
-    ViewData["Title"] = "My Findings";
+@{ ViewData["Title"] = "My Findings"; var findings = Model.ToList(); }
+<div class="eyebrow">EMPLOYEE WORKSPACE</div>
+<h1 class="page-title">My risk findings</h1>
+<p class="page-subtitle">Track assessments, review relevance and manage comments linked to safety notices.</p>
+<div class="stat-grid">
+<div class="stat-card"><div class="stat-label">Total findings</div><div class="stat-number">@findings.Count</div><div class="stat-note">Your recorded assessments</div></div>
+<div class="stat-card"><div class="stat-label">High relevance</div><div class="stat-number">@findings.Count(f => f.Relevance == MedicalDeviceSafetyPlatform.Models.FindingRelevance.High)</div><div class="stat-note">Priority assessments</div></div>
+<div class="stat-card"><div class="stat-label">Open findings</div><div class="stat-number">@findings.Count(f => f.Status == MedicalDeviceSafetyPlatform.Models.FindingStatus.Open)</div><div class="stat-note">Awaiting resolution</div></div>
+</div>
+<section class="content-card">
+<div class="card-heading"><div><h2>Assessment register</h2><p>Only findings belonging to your employee account are shown</p></div><a class="btn btn-primary" asp-controller="Home" asp-action="Index">+ New finding</a></div>
+@if (!findings.Any()) { <div class="p-4 text-secondary">You haven't recorded any findings yet. Choose a safety notice on the dashboard to get started.</div> }
+else {
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Notice</th><th>Finding</th><th>Relevance</th><th>Status</th><th>Last updated</th><th></th></tr></thead><tbody>
+@foreach(var finding in findings) {
+<tr><td><span class="reference-code">@finding.SafetyNotice?.Reference</span></td><td><span class="device-name">@finding.Title</span></td><td><span class="badge-soft">@finding.Relevance</span></td><td>@finding.Status</td><td>@finding.UpdatedAtUtc.ToLocalTime().ToString("dd MMM yyyy")</td><td><a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@finding.Id">View →</a></td></tr>
 }
-<h1>My Findings</h1>
-<p>Risk-review findings you have recorded against selected safety and recall notices.</p>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-info">You have not recorded any findings yet.</div>
+</tbody></table></div>
 }
-else
-{
-    <table class="table table-striped align-middle">
-        <thead>
-        <tr>
-            <th>Notice</th><th>Finding</th><th>Relevance</th><th>Status</th><th>Updated</th><th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var finding in Model)
-        {
-            <tr>
-                <td>@finding.SafetyNotice?.Reference</td>
-                <td>@finding.Title</td>
-                <td>@finding.Relevance</td>
-                <td>@finding.Status</td>
-                <td>@finding.UpdatedAtUtc.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
-                <td><a asp-action="Details" asp-route-id="@finding.Id" class="btn btn-sm btn-outline-primary">View</a></td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+</section>
