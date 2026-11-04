@@ -1,0 +1,8 @@
+@model MedicalDeviceSafetyPlatform.Controllers.RegisterInput
+@{ ViewData["Title"] = "Register"; }
+<h1>Register demo employee</h1>
+<form asp-action="Register" method="post">
+<div asp-validation-summary="All" class="text-danger"></div>
+<div class="mb-3"><label asp-for="Email"></label><input asp-for="Email" class="form-control"/></div>
+<div class="mb-3"><label asp-for="Password"></label><input asp-for="Password" type="password" class="form-control"/></div>
+<button class="btn btn-primary">Register</button></form>
