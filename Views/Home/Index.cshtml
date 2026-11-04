@@ -1,10 +1,25 @@
 @model IEnumerable<MedicalDeviceSafetyPlatform.Models.SafetyNotice>
-@{ ViewData["Title"] = "Safety Notices"; }
-<h1>Safety Notices</h1>
-<p class="text-muted">Standalone local demonstration of the individual Risk Findings component.</p>
-@if (User.Identity?.IsAuthenticated != true) { <p><a asp-controller="Account" asp-action="Register">Create an employee account</a> to add findings.</p> }
-<table class="table table-striped"><thead><tr><th>Reference</th><th>Device</th><th></th></tr></thead><tbody>
-@foreach (var notice in Model) { <tr><td>@notice.Reference</td><td>@notice.DeviceName</td><td>
-<a asp-controller="Findings" asp-action="Create" asp-route-safetyNoticeId="@notice.Id" class="btn btn-primary btn-sm">Add finding</a>
-</td></tr> }
-</tbody></table>
+@{ ViewData["Title"] = "Dashboard"; var notices = Model.ToList(); }
+<section class="hero-panel">
+<div class="eyebrow" style="color:#a9d2ff">RISK MANAGEMENT WORKSPACE</div>
+<h1>Safety starts with visibility.</h1>
+<p>Review medical device safety notices, document risk findings and maintain an auditable record of employee observations.</p>
+@if (User.Identity?.IsAuthenticated != true) { <a class="btn btn-light" asp-controller="Account" asp-action="Register">Create employee account →</a> }
+else { <a class="btn btn-light" asp-controller="Findings" asp-action="Index">View my findings →</a> }
+</section>
+<section class="stat-grid" aria-label="Dashboard overview">
+<div class="stat-card"><div class="stat-label">Available safety notices</div><div class="stat-number">@notices.Count</div><div class="stat-note">Ready for risk assessment</div></div>
+<div class="stat-card"><div class="stat-label">Component</div><div class="stat-number" style="font-size:22px">Risk Findings</div><div class="stat-note">Employee observations &amp; comments</div></div>
+<div class="stat-card"><div class="stat-label">Workspace access</div><div class="stat-number" style="font-size:22px">@(User.Identity?.IsAuthenticated == true ? "Employee" : "Guest")</div><div class="stat-note">@(User.Identity?.IsAuthenticated == true ? "Signed in" : "Sign in to record findings")</div></div>
+</section>
+<section class="content-card">
+<div class="card-heading"><div><h2>Safety notice register</h2><p>Select a notice to document a new risk finding</p></div><span class="badge-soft">@notices.Count notices</span></div>
+<div class="table-responsive"><table class="table align-middle">
+<thead><tr><th>Notice reference</th><th>Medical device</th><th>Assessment</th><th>Action</th></tr></thead>
+<tbody>
+@foreach(var notice in notices) {
+<tr><td><span class="reference-code">@notice.Reference</span></td><td><span class="device-name">@notice.DeviceName</span></td><td><span class="badge-soft">Ready for review</span></td><td><a class="btn btn-outline-primary btn-sm" asp-controller="Findings" asp-action="Create" asp-route-safetyNoticeId="@notice.Id">Add finding →</a></td></tr>
+}
+@if (!notices.Any()) { <tr><td colspan="4" class="text-center text-secondary py-4">No safety notices available.</td></tr> }
+</tbody></table></div>
+</section>
