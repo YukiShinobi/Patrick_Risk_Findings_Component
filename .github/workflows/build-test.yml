@@ -1,0 +1,19 @@
+name: Build and test individual demo
+on:
+  push:
+    branches: [finish-individual-component-2026-11]
+  pull_request:
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore MedicalDeviceSafetyPlatform.csproj
+      - name: Build
+        run: dotnet build MedicalDeviceSafetyPlatform.csproj --no-restore
+      - name: Test
+        run: dotnet test Tests/MedicalDeviceSafetyPlatform.Tests.csproj
