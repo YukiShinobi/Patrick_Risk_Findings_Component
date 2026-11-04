@@ -1,51 +1,30 @@
 @model MedicalDeviceSafetyPlatform.Models.Finding
-@{
-    ViewData["Title"] = "Finding Details";
-}
-@if (TempData["Success"] is string success) { <div class="alert alert-success">@success</div> }
-@if (TempData["Error"] is string error) { <div class="alert alert-danger">@error</div> }
-
-<div class="d-flex justify-content-between align-items-start">
-    <div>
-        <small class="text-muted">@Model.SafetyNotice?.Reference</small>
-        <h1>@Model.Title</h1>
-    </div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Edit finding</a>
+@{ ViewData["Title"] = "Finding Details"; }
+<div class="page-heading-row">
+ <div><a asp-action="Index" class="back-link">← Back to findings</a><div class="eyebrow mt-3">RISK ASSESSMENT / @Model.SafetyNotice?.Reference</div><h1 class="page-title">@Model.Title</h1><p class="page-subtitle">Review assessment details, status and employee discussion.</p></div>
+ <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit finding →</a>
 </div>
-
-<div class="card mb-4">
-    <div class="card-body">
-        <p><strong>Device:</strong> @Model.SafetyNotice?.DeviceName</p>
-        <p><strong>Relevance:</strong> @Model.Relevance</p>
-        <p><strong>Status:</strong> @Model.Status</p>
-        <h2 class="h5">Risk-review analysis</h2>
-        <p style="white-space: pre-wrap">@Model.Analysis</p>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <h2 class="h5">Employee comments</h2>
-        @if (!Model.Comments.Any())
-        {
-            <p class="text-muted">No comments have been added.</p>
-        }
-        else
-        {
-            @foreach (var comment in Model.Comments.OrderBy(c => c.CreatedAtUtc))
-            {
-                <div class="border-bottom py-2">
-                    <strong>@(comment.Author?.UserName ?? "Employee")</strong>
-                    <small class="text-muted">@comment.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy HH:mm")</small>
-                    <div>@comment.Body</div>
-                </div>
-            }
-        }
-
-        <form asp-action="AddComment" asp-route-id="@Model.Id" method="post" class="mt-3">
-            <label for="body" class="form-label">Add comment</label>
-            <textarea id="body" name="body" maxlength="1500" rows="3" class="form-control" required></textarea>
-            <button class="btn btn-primary mt-2" type="submit">Add comment</button>
-        </form>
-    </div>
+@if (TempData["Success"] is string success) { <div class="alert alert-success" role="status">@success</div> }
+@if (TempData["Error"] is string error) { <div class="alert alert-danger" role="alert">@error</div> }
+<div class="details-grid">
+ <div>
+  <section class="content-card"><div class="card-heading"><div><h2>Risk review analysis</h2><p>Assessment documented by the employee</p></div></div><div class="content-body"><p class="analysis-text">@Model.Analysis</p></div></section>
+  <section class="content-card"><div class="card-heading"><div><h2>Employee comments</h2><p>Discussion and observations associated with this finding</p></div><span class="badge-soft">@Model.Comments.Count comment(s)</span></div>
+   <div class="content-body">
+   @if (!Model.Comments.Any()) { <div class="empty-state">No comments yet. Add the first observation below.</div> }
+   else { @foreach(var comment in Model.Comments.OrderBy(c => c.CreatedAtUtc)) {
+    <div class="comment-item"><div class="comment-avatar" aria-hidden="true">E</div><div class="flex-grow-1"><div class="d-flex justify-content-between gap-2 flex-wrap"><strong>@(comment.Author?.UserName ?? "Employee")</strong><span class="text-secondary small">@comment.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy, HH:mm")</span></div><p class="mb-0 mt-2 comment-body">@comment.Body</p></div></div>
+   } }
+   <form asp-action="AddComment" asp-route-id="@Model.Id" method="post" class="mt-4"><label for="body" class="form-label">Add a comment</label><textarea id="body" name="body" maxlength="1500" rows="4" class="form-control" placeholder="Record an observation or follow-up..." required></textarea><div class="mt-3"><button type="submit" class="btn btn-primary">Post comment</button></div></form>
+   </div>
+  </section>
+ </div>
+ <aside class="content-card detail-sidebar"><div class="card-heading"><div><h2>Assessment overview</h2><p>Key record information</p></div></div><div class="content-body">
+  <div class="meta-row"><span>Notice reference</span><strong class="reference-code">@Model.SafetyNotice?.Reference</strong></div>
+  <div class="meta-row"><span>Medical device</span><strong>@Model.SafetyNotice?.DeviceName</strong></div>
+  <div class="meta-row"><span>Relevance</span><span class="badge-soft">@Model.Relevance</span></div>
+  <div class="meta-row"><span>Status</span><strong>@Model.Status</strong></div>
+  <div class="meta-row"><span>Created</span><strong>@Model.CreatedAtUtc.ToLocalTime().ToString("dd MMM yyyy")</strong></div>
+  <div class="meta-row"><span>Updated</span><strong>@Model.UpdatedAtUtc.ToLocalTime().ToString("dd MMM yyyy")</strong></div>
+ </div></aside>
 </div>
