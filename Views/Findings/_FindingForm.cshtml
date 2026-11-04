@@ -1,5 +1,5 @@
 @model MedicalDeviceSafetyPlatform.ViewModels.FindingFormViewModel
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
 <input asp-for="SafetyNoticeId" type="hidden" />
 <input asp-for="Id" type="hidden" />
 <input asp-for="RowVersion" type="hidden" />
@@ -7,24 +7,25 @@
 <div class="alert alert-secondary">
     <strong>@Model.NoticeReference</strong> — @Model.DeviceName
 </div>
-
 <div class="mb-3">
     <label asp-for="Title" class="form-label"></label>
-    <input asp-for="Title" class="form-control" />
+    <input asp-for="Title" class="form-control" maxlength="150" />
     <span asp-validation-for="Title" class="text-danger"></span>
 </div>
 <div class="mb-3">
     <label asp-for="Analysis" class="form-label"></label>
-    <textarea asp-for="Analysis" class="form-control" rows="8"></textarea>
+    <textarea asp-for="Analysis" class="form-control" rows="8" minlength="10" maxlength="4000"></textarea>
     <span asp-validation-for="Analysis" class="text-danger"></span>
 </div>
 <div class="row">
     <div class="col-md-6 mb-3">
         <label asp-for="Relevance" class="form-label"></label>
         <select asp-for="Relevance" asp-items="Html.GetEnumSelectList<MedicalDeviceSafetyPlatform.Models.FindingRelevance>()" class="form-select"></select>
+        <span asp-validation-for="Relevance" class="text-danger"></span>
     </div>
     <div class="col-md-6 mb-3">
         <label asp-for="Status" class="form-label"></label>
         <select asp-for="Status" asp-items="Html.GetEnumSelectList<MedicalDeviceSafetyPlatform.Models.FindingStatus>()" class="form-select"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 </div>
