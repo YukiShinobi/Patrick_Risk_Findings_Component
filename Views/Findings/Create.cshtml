@@ -1,9 +1,10 @@
 @model MedicalDeviceSafetyPlatform.ViewModels.FindingFormViewModel
 @{ ViewData["Title"] = "Add Finding"; }
-<h1>Add Employee Finding</h1>
-<p>Record your risk-review analysis for the selected notice.</p>
-<form asp-action="Create" method="post">
-    <partial name="_FindingForm" model="Model" />
-    <button type="submit" class="btn btn-primary">Save finding</button>
-</form>
+<a asp-controller="Home" asp-action="Index" class="back-link">← Back to safety notices</a>
+<div class="eyebrow mt-3">RISK MANAGEMENT / NEW ASSESSMENT</div>
+<h1 class="page-title">Create risk finding</h1>
+<p class="page-subtitle">Document an assessment of the selected medical device safety notice.</p>
+<section class="content-card form-panel"><div class="card-heading"><div><h2>Finding information</h2><p>Complete the fields below to save your assessment</p></div></div>
+<div class="content-body"><form asp-action="Create" method="post"><partial name="_FindingForm" model="Model" />
+<div class="form-actions"><button type="submit" class="btn btn-primary">Save finding →</button><a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Cancel</a></div></form></div></section>
 @section Scripts { <partial name="_ValidationScriptsPartial" /> }
