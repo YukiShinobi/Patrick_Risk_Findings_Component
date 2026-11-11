@@ -7,8 +7,6 @@
     <div class="winters-overlay" aria-hidden="true"></div>
     <div class="winters-glow winters-glow-1" aria-hidden="true"></div>
     <div class="winters-glow winters-glow-2" aria-hidden="true"></div>
-    <div class="winters-float winters-float-1" aria-hidden="true"></div>
-    <div class="winters-float winters-float-2" aria-hidden="true"></div>
 
     <header class="winters-identity">
         <span class="winters-symbol" aria-hidden="true">✚</span>
@@ -19,15 +17,37 @@
         <div class="winters-rule" aria-hidden="true"></div>
         <p class="winters-overline">MEDICAL DEVICE SAFETY PLATFORM</p>
         <h2>Care begins<br />with confidence.</h2>
-        <p>A secure place to review device safety notices, document risk assessments and manage employee findings.</p>
+        <p>Secure access to medical device safety notices, risk assessments and employee findings.</p>
     </div>
 
-    <div class="winters-access">
-        <a class="winters-login" asp-controller="Account" asp-action="Login">
-            Employee login <span class="winters-login-arrow" aria-hidden="true">↗</span>
-        </a>
-        <a class="winters-secondary" asp-controller="Account" asp-action="Register">New employee? Create an account</a>
-    </div>
+    <form class="winters-login-form" asp-controller="Account" asp-action="Login"
+          asp-antiforgery="true" method="post" aria-label="Employee sign in">
+        <div class="winters-auth-panel">
+            <div class="winters-form-eyebrow">WINTERS HOSPITALS · STAFF PORTAL</div>
+            <h2 class="winters-form-title">Welcome back.</h2>
+            <p class="winters-form-subtitle">Sign in to your employee workspace.</p>
+
+            <div class="winters-field winters-field-email">
+                <label for="winters-email">Email address</label>
+                <input id="winters-email" name="Email" type="email" placeholder="name@example.com"
+                       autocomplete="username" inputmode="email" required />
+            </div>
+            <div class="winters-field winters-field-password">
+                <label for="winters-password">Password</label>
+                <input id="winters-password" name="Password" type="password" placeholder="Enter your password"
+                       autocomplete="current-password" required />
+            </div>
+            <a class="winters-register" asp-controller="Account" asp-action="Register">
+                New employee? Create an account
+            </a>
+        </div>
+
+        <div class="winters-bottom-action">
+            <button class="winters-continue" type="submit">
+                Continue <span aria-hidden="true">↗</span>
+            </button>
+        </div>
+    </form>
 
     <footer class="winters-footer">
         <span>Winters Hospitals · Medical Device Safety</span>
