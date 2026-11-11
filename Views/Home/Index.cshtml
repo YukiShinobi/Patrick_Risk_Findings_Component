@@ -1,5 +1,62 @@
 @model IEnumerable<MedicalDeviceSafetyPlatform.Models.SafetyNotice>
-@{ ViewData["Title"] = "Dashboard"; var notices = Model.ToList(); }
+@{ ViewData["Title"] = User.Identity?.IsAuthenticated == true ? "Dashboard" : "Welcome"; var notices = Model.ToList(); }
+@if (User.Identity?.IsAuthenticated != true)
+{
+<section class="winters-landing" aria-labelledby="winters-title">
+    <div class="winters-scene" aria-hidden="true"></div>
+    <div class="winters-overlay" aria-hidden="true"></div>
+    <div class="winters-glow winters-glow-1" aria-hidden="true"></div>
+    <div class="winters-glow winters-glow-2" aria-hidden="true"></div>
+
+    <header class="winters-identity">
+        <span class="winters-symbol" aria-hidden="true">✚</span>
+        <h1 class="winters-wordmark" id="winters-title">Winters <span>Hospitals</span></h1>
+    </header>
+
+    <div class="winters-welcome">
+        <div class="winters-rule" aria-hidden="true"></div>
+        <p class="winters-overline">MEDICAL DEVICE SAFETY PLATFORM</p>
+        <h2>Care begins<br />with confidence.</h2>
+        <p>Secure access to medical device safety notices, risk assessments and employee findings.</p>
+    </div>
+
+    <form class="winters-login-form" asp-controller="Account" asp-action="Login"
+          asp-antiforgery="true" method="post" aria-label="Employee sign in">
+        <div class="winters-auth-panel">
+            <div class="winters-form-eyebrow">WINTERS HOSPITALS · STAFF PORTAL</div>
+            <h2 class="winters-form-title">Welcome back.</h2>
+            <p class="winters-form-subtitle">Sign in to your employee workspace.</p>
+
+            <div class="winters-field winters-field-email">
+                <label for="winters-email">Email address</label>
+                <input id="winters-email" name="Email" type="email" placeholder="name@example.com"
+                       autocomplete="username" inputmode="email" required />
+            </div>
+            <div class="winters-field winters-field-password">
+                <label for="winters-password">Password</label>
+                <input id="winters-password" name="Password" type="password" placeholder="Enter your password"
+                       autocomplete="current-password" required />
+            </div>
+            <a class="winters-register" asp-controller="Account" asp-action="Register">
+                New employee? Create an account
+            </a>
+        </div>
+
+        <div class="winters-bottom-action">
+            <button class="winters-continue" type="submit">
+                Continue <span aria-hidden="true">↗</span>
+            </button>
+        </div>
+    </form>
+
+    <footer class="winters-footer">
+        <span>Winters Hospitals · Medical Device Safety</span>
+        <span>Secure employee access</span>
+    </footer>
+</section>
+}
+else
+{
 <section class="hero-panel">
 <div class="eyebrow" style="color:#a9d2ff">RISK MANAGEMENT WORKSPACE</div>
 <h1>Safety starts with visibility.</h1>
@@ -23,3 +80,4 @@ else { <a class="btn btn-light" asp-controller="Findings" asp-action="Index">Vie
 @if (!notices.Any()) { <tr><td colspan="4" class="text-center text-secondary py-4">No safety notices available.</td></tr> }
 </tbody></table></div>
 </section>
+}

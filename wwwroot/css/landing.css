@@ -1,0 +1,296 @@
+/*
+ * Winters Hospitals - animated employee welcome screen.
+ * Hospital background by LEDC, Unsplash License:
+ * https://unsplash.com/photos/aYvI1HC7wM0
+ * Blurred backdrop and CSS-only transitions; the login posts to Account/Login.
+ */
+.winters-public-page { background: #102334; }
+.winters-public-page .side-nav,
+.winters-public-page .topbar,
+.winters-public-page .footer-note { display: none; }
+.winters-public-page .app-shell { display: block; min-height: 100svh; }
+.winters-public-page .main-area { width: 100%; }
+.winters-public-page .page-content { width: 100%; max-width: none; margin: 0; padding: 0; }
+
+.winters-landing {
+    position: relative;
+    isolation: isolate;
+    min-height: 800px;
+    min-height: max(800px, 100svh);
+    overflow: hidden;
+    background: #102334;
+    color: #fff;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.winters-scene {
+    position: absolute;
+    inset: -28px;
+    z-index: 0;
+    background-image:
+        linear-gradient(90deg, rgba(6,23,38,.73), rgba(8,27,42,.29) 65%, rgba(7,26,41,.42)),
+        url("https://images.unsplash.com/photo-1764885449332-7eb941d53b7e?auto=format&fit=crop&w=2400&q=85");
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px) brightness(.86);
+    transform: scale(1.04);
+    animation: winters-scene-settle 7s ease-out both;
+}
+.winters-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(3,17,30,.28), transparent 37%, rgba(3,17,30,.69) 100%),
+        radial-gradient(circle at 25% 25%, rgba(132,215,236,.13), transparent 28%);
+}
+.winters-glow {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(58px);
+    opacity: .2;
+    animation: winters-ambient 12s ease-in-out infinite alternate;
+}
+.winters-glow-1 { width: 240px; height: 240px; top: 12%; right: 13%; background: #86cad6; }
+.winters-glow-2 { width: 170px; height: 170px; bottom: 18%; left: 12%; background: #a7d5e7; animation-direction: alternate-reverse; }
+
+/* Starts centre-screen, ends at top left. */
+.winters-identity {
+    position: absolute;
+    z-index: 5;
+    top: clamp(26px, 5vh, 65px);
+    left: clamp(26px, 5vw, 82px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transform-origin: left center;
+    animation: winters-name-to-corner 2.1s cubic-bezier(.17,.8,.2,1) both;
+}
+.winters-symbol {
+    display: grid;
+    place-items: center;
+    width: 51px; height: 51px;
+    flex: 0 0 auto;
+    border: 1px solid rgba(255,255,255,.58);
+    border-radius: 14px;
+    background: rgba(255,255,255,.13);
+    backdrop-filter: blur(9px);
+    font-size: 28px;
+}
+.winters-wordmark {
+    margin: 0;
+    color: #fff;
+    white-space: nowrap;
+    font-size: clamp(26px, 3vw, 44px);
+    line-height: 1;
+    letter-spacing: -.045em;
+    font-weight: 820;
+    text-shadow: 0 4px 20px rgba(0,0,0,.2);
+}
+.winters-wordmark span { font-weight: 370; }
+
+/* Intro appears on the left after the wordmark clears the centre. */
+.winters-welcome {
+    position: absolute;
+    z-index: 3;
+    top: 39%;
+    left: clamp(28px, 6vw, 100px);
+    max-width: min(540px, 43%);
+    animation: winters-intro-enter .85s ease-out 1.85s both;
+}
+.winters-rule { width: 42px; height: 3px; margin-bottom: 22px; border-radius: 5px; background: #b9eff1; }
+.winters-overline { font-size: 11px; letter-spacing: .24em; font-weight: 780; color: #d2f5ff; margin: 0 0 19px; }
+.winters-welcome h2 {
+    margin: 0 0 20px;
+    font-size: clamp(36px, 4.4vw, 69px);
+    line-height: 1.05;
+    letter-spacing: -.05em;
+    font-weight: 770;
+}
+.winters-welcome > p:last-child { max-width: 465px; margin: 0; font-size: 15px; line-height: 1.8; color: #e0edf5; }
+
+/* The actual login form submits to AccountController.Login (POST).
+   Only its inputs and the button are animated - authentication stays server-side. */
+.winters-login-form { display: contents; }
+.winters-auth-panel {
+    position: absolute;
+    z-index: 4;
+    top: 47%;
+    right: clamp(28px, 6vw, 100px);
+    width: min(430px, 42vw);
+    min-width: 340px;
+    padding: clamp(27px, 3vw, 38px);
+    transform: translateY(-50%);
+    border: 1px solid rgba(240,250,255,.23);
+    border-radius: 24px;
+    background: rgba(6, 27, 44, .66);
+    box-shadow: 0 22px 72px rgba(2,12,23,.32);
+    backdrop-filter: blur(16px);
+    animation: winters-panel-appear .65s ease-out 2s both;
+}
+.winters-form-eyebrow { margin-bottom: 11px; font-size: 10px; font-weight: 780; letter-spacing: .18em; color: #bee9ef; }
+.winters-form-title { margin: 0 0 8px; font-size: 29px; font-weight: 750; letter-spacing: -.04em; color: #fff; }
+.winters-form-subtitle { margin: 0 0 28px; color: #c9dce9; font-size: 13px; line-height: 1.6; }
+.winters-field { margin: 0 0 21px; animation: winters-field-from-right .82s cubic-bezier(.2,.8,.2,1) both; }
+.winters-field-email { animation-delay: 2.27s; }
+.winters-field-password { animation-delay: 2.55s; }
+.winters-field label { display: block; margin-bottom: 10px; font-size: 13px; font-weight: 650; color: #f1f8fb; }
+.winters-field input {
+    width: 100%;
+    height: 53px;
+    padding: 0 16px;
+    color: #f6fcff;
+    background: rgba(255,255,255,.105);
+    border: 1px solid rgba(226,241,249,.32);
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.winters-field input::placeholder { color: #aebfc9; }
+.winters-field input:focus { border-color: #b9eff1; background: rgba(255,255,255,.14); box-shadow: 0 0 0 3px rgba(163,230,244,.15); }
+.winters-register {
+    display: inline-block;
+    color: #d3eef5;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    animation: winters-field-from-right .8s cubic-bezier(.2,.8,.2,1) 2.8s both;
+}
+.winters-register:hover { color: #fff; }
+
+/* Bottom-screen CTA rises up once the credentials have appeared. */
+.winters-bottom-action {
+    position: absolute;
+    z-index: 5;
+    bottom: clamp(57px, 9vh, 102px);
+    left: 50%;
+    width: min(340px, calc(100% - 48px));
+    transform: translateX(-50%);
+}
+.winters-continue {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    width: 100%;
+    min-height: 59px;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 999px;
+    background: #fff;
+    color: #0c2c42;
+    font-size: 16px;
+    font-weight: 780;
+    cursor: pointer;
+    box-shadow: 0 15px 45px rgba(0,0,0,.26);
+    transition: background .2s ease, box-shadow .2s ease;
+    animation: winters-continue-from-bottom .95s cubic-bezier(.15,.9,.25,1) 3s both;
+}
+.winters-continue span { font-size: 23px; font-weight: 400; line-height: 1; }
+.winters-continue:hover { background: #e7faff; box-shadow: 0 20px 55px rgba(0,0,0,.3); }
+.winters-continue:focus-visible, .winters-register:focus-visible { outline: 3px solid #9deef5; outline-offset: 4px; }
+.winters-footer {
+    position: absolute;
+    z-index: 3;
+    bottom: 20px;
+    left: clamp(28px, 6vw, 100px);
+    right: clamp(28px, 6vw, 100px);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: rgba(236,246,252,.67);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    animation: winters-intro-enter .8s ease-out 3.1s both;
+}
+
+@keyframes winters-name-to-corner {
+    0%, 20% { top: 50%; left: 50%; transform: translate(-50%,-50%) scale(1.18); }
+    100% { top: clamp(26px, 5vh, 65px); left: clamp(26px, 5vw, 82px); transform: translate(0,0) scale(1); }
+}
+@keyframes winters-scene-settle {
+    from { filter: blur(13px) brightness(.64); transform: scale(1.095); }
+    to { filter: blur(8px) brightness(.86); transform: scale(1.04); }
+}
+@keyframes winters-panel-appear {
+    from { opacity: 0; transform: translateY(calc(-50% + 12px)); }
+    to { opacity: 1; transform: translateY(-50%); }
+}
+@keyframes winters-field-from-right {
+    from { opacity: 0; transform: translateX(75px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes winters-continue-from-bottom {
+    from { opacity: 0; transform: translateY(85px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes winters-intro-enter {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes winters-ambient {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(11px,-13px) scale(1.08); }
+}
+
+/* Tablet: keep intro and credential form in distinct columns. */
+@media (max-width: 1080px) and (min-width: 801px) {
+    .winters-welcome { max-width: 38%; top: 36%; }
+    .winters-welcome h2 { font-size: clamp(34px, 4.2vw, 48px); }
+    .winters-auth-panel { width: 44%; min-width: 0; }
+}
+/* Phone: stack the brand, welcome and form with sufficient room to scroll. */
+@media (max-width: 800px) {
+    .winters-landing { min-height: max(955px, 100svh); }
+    .winters-scene { background-position: 60% center; }
+    .winters-identity { gap: 10px; }
+    .winters-symbol { width: 41px; height: 41px; font-size: 22px; border-radius: 12px; }
+    .winters-wordmark { font-size: clamp(21px, 6.5vw, 31px); }
+    .winters-welcome {
+        top: 137px;
+        left: 26px; right: 26px;
+        max-width: 540px;
+    }
+    .winters-rule { margin-bottom: 12px; }
+    .winters-overline { margin-bottom: 11px; letter-spacing: .15em; font-size: 10px; }
+    .winters-welcome h2 { font-size: clamp(33px, 7.6vw, 47px); margin-bottom: 9px; }
+    .winters-welcome > p:last-child { font-size: 13px; line-height: 1.5; }
+    .winters-auth-panel {
+        top: 363px;
+        left: 26px; right: 26px;
+        width: auto; max-width: 540px; min-width: 0;
+        margin: 0 auto;
+        padding: 24px;
+        transform: none;
+        animation-name: winters-panel-appear-mobile;
+    }
+    .winters-form-subtitle { margin-bottom: 22px; }
+    .winters-field { margin-bottom: 16px; }
+    .winters-bottom-action { bottom: 62px; }
+    .winters-footer { left: 26px; right: 26px; justify-content: center; text-align: center; bottom: 19px; }
+    .winters-footer span:last-child { display: none; }
+}
+@media (max-width: 370px) {
+    .winters-landing { min-height: max(1000px, 100svh); }
+    .winters-auth-panel { top: 383px; }
+}
+@keyframes winters-panel-appear-mobile {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .winters-scene, .winters-glow, .winters-identity, .winters-welcome,
+    .winters-auth-panel, .winters-field, .winters-register,
+    .winters-continue, .winters-footer { animation: none !important; }
+    .winters-scene { filter: blur(8px) brightness(.86); transform: scale(1.04); }
+    .winters-login-form .winters-auth-panel { transform: translateY(-50%); }
+    .winters-continue, .winters-field input { transition: none; }
+}
+@media (max-width: 800px) and (prefers-reduced-motion: reduce) {
+    .winters-login-form .winters-auth-panel { transform: none; }
+}
