@@ -25,7 +25,7 @@
   inset: 0;
   z-index: -2;
   background-image:
-    linear-gradient(90deg, rgba(2, 23, 40, .80) 0%, rgba(5, 28, 42, .46) 55%, rgba(8, 25, 39, .26) 100%),
+    linear-gradient(90deg, rgba(2, 23, 40, .76) 0%, rgba(5, 28, 42, .29) 55%, rgba(8, 25, 39, .12) 100%),
     linear-gradient(0deg, rgba(3, 19, 31, .68) 0%, transparent 42%),
     url("https://images.unsplash.com/photo-1764885449332-7eb941d53b7e?auto=format&fit=crop&w=2400&q=85");
   background-size: cover;
@@ -215,4 +215,79 @@
   .winters-scene, .winters-identity, .winters-welcome,
   .winters-access, .winters-footer { animation: none; }
   .winters-login { transition: none; }
+}
+
+/* Low-contrast cinematic light effects, behind the information and buttons. */
+.winters-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(135,220,232,.14), transparent 25%),
+    radial-gradient(circle at 80% 76%, rgba(235,252,255,.07), transparent 30%);
+}
+.winters-glow {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(44px);
+  opacity: .34;
+}
+.winters-glow-1 {
+  width: 200px;
+  height: 200px;
+  right: 11%;
+  top: 12%;
+  background: rgba(88, 215, 238, .35);
+  animation: winters-glow-float 9s ease-in-out infinite alternate;
+}
+.winters-glow-2 {
+  width: 180px;
+  height: 180px;
+  left: 10%;
+  bottom: 20%;
+  background: rgba(216, 248, 255, .18);
+  animation: winters-glow-float 11s ease-in-out infinite alternate-reverse;
+}
+.winters-float {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(230, 250, 255, .045);
+  backdrop-filter: blur(6px);
+  border-radius: 22px;
+  box-shadow: 0 8px 35px rgba(0,0,0,.07);
+  animation: winters-float-y 8s ease-in-out infinite;
+}
+.winters-float-1 {
+  top: 23%;
+  right: 15%;
+  width: 92px;
+  height: 92px;
+}
+.winters-float-2 {
+  right: 28%;
+  bottom: 29%;
+  width: 68px;
+  height: 68px;
+  animation-duration: 10s;
+  animation-direction: reverse;
+}
+@keyframes winters-float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes winters-glow-float {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to { transform: translate3d(12px,-14px,0) scale(1.08); }
+}
+@media (max-width: 650px) {
+  .winters-float { display: none; }
+  .winters-glow { opacity: .18; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .winters-glow, .winters-float { animation: none; }
 }
