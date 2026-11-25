@@ -5,3 +5,7 @@ obj/
 *.db-shm
 *.db-wal
 **/TestResults/
+
+# Unrelated local assistant projects must not be committed here.
+[Vv][Ee][Yy][Rr][Aa]*/
+node_modules/

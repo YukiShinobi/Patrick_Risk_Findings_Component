@@ -1,7 +1,7 @@
 name: Build and test individual demo
 on:
   push:
-    branches: [finish-individual-component-2026-11]
+    branches: [main, finish-individual-component-2026-11]
   pull_request:
 jobs:
   build-test:
@@ -13,6 +13,10 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Restore
         run: dotnet restore MedicalDeviceSafetyPlatform.csproj
+      - name: Verify unrelated local source is excluded
+        run: |
+          mkdir -p Veyra
+          echo 'This must never be compiled by the hospital project.' > Veyra/Excluded.cs
       - name: Build
         run: dotnet build MedicalDeviceSafetyPlatform.csproj --no-restore
       - name: Test

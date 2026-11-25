@@ -22,11 +22,16 @@
 
     <form class="winters-login-form" asp-controller="Account" asp-action="Login"
           asp-antiforgery="true" method="post" aria-label="Employee sign in">
+        <input type="hidden" name="FromLanding" value="true" />
         <div class="winters-auth-panel">
             <div class="winters-form-eyebrow">WINTERS HOSPITALS · STAFF PORTAL</div>
             <h2 class="winters-form-title">Welcome back.</h2>
             <p class="winters-form-subtitle">Sign in to your employee workspace.</p>
 
+            @if (TempData["LandingLoginError"] is string loginError)
+            {
+                <p class="winters-login-error" role="alert">@loginError</p>
+            }
             <div class="winters-field winters-field-email">
                 <label for="winters-email">Email address</label>
                 <input id="winters-email" name="Email" type="email" placeholder="name@example.com"
@@ -61,8 +66,7 @@ else
 <div class="eyebrow" style="color:#a9d2ff">RISK MANAGEMENT WORKSPACE</div>
 <h1>Safety starts with visibility.</h1>
 <p>Review medical device safety notices, document risk findings and maintain an auditable record of employee observations.</p>
-@if (User.Identity?.IsAuthenticated != true) { <a class="btn btn-light" asp-controller="Account" asp-action="Register">Create employee account →</a> }
-else { <a class="btn btn-light" asp-controller="Findings" asp-action="Index">View my findings →</a> }
+<a class="btn btn-light" asp-controller="Findings" asp-action="Index">View my findings →</a>
 </section>
 <section class="stat-grid" aria-label="Dashboard overview">
 <div class="stat-card"><div class="stat-label">Available safety notices</div><div class="stat-number">@notices.Count</div><div class="stat-note">Ready for risk assessment</div></div>

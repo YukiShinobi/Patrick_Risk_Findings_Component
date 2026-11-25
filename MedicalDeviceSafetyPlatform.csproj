@@ -3,12 +3,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Keep unrelated projects and nested test outputs out of this web application. -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Tests/**;**/Veyra*/**;**/veyra*/**;**/VEYRA*/**;**/bin/**;**/obj/**;**/node_modules/**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Program.cs;Controllers/**/*.cs;Data/**/*.cs;Models/**/*.cs;ViewModels/**/*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Tests/**/*.cs" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ dotnet build MedicalDeviceSafetyPlatform.csproj
 dotnet run --project MedicalDeviceSafetyPlatform.csproj --urls http://localhost:5077
 ```
 
-Visit **http://localhost:5077**. Click **Register**, enter an email and password (8+ characters with upper/lowercase, digit, and symbol), then select **Add finding** beside one of the seeded safety notices. Create, view, edit, and comment on a finding. Use **My Findings** to show saved records.
+Visit **http://localhost:5077**. The animated Winters Hospitals welcome page is shown before signing in. Click **New employee? Create an account**, enter an email and password (8+ characters with upper/lowercase, digit, and symbol), then select **Add finding** beside one of the seeded safety notices. Create, view, edit, and comment on a finding. Use **My Findings** to show saved records.
 
 The SQLite database `findings-demo.db` is created on first launch and excluded from Git. To reset the **local demo** database, stop the app and delete that file. Do not delete a shared/team database.
 
@@ -39,3 +39,16 @@ dotnet test Tests/MedicalDeviceSafetyPlatform.Tests.csproj
 - `EnsureCreated` is for this local demo only. Use EF Core migrations and the team's real Identity/SafetyNotice models when integrating.
 - The ERD and controller/view source are prepared; the exact 70% completion threshold is determined by your lecturer and the integrated system.
 - Before merging this branch into the team's repository, review conflicts and avoid copying the demo's `ApplicationUser`, `SafetyNotice`, `ApplicationDbContext`, `Program.cs` or `AccountController` over team equivalents.
+
+## Troubleshooting a Windows build
+Open this repository folder alone in VS Code, not a parent folder or a multi-root workspace containing Veyra. If Veyra is physically nested here, move that separate project outside this repository without deleting its files. The web project explicitly compiles its own source directories and excludes Veyra and nested build outputs.
+
+Stop any running demo with Ctrl+C before cleaning (a running executable can lock the build output). In the repository root:
+```powershell
+dotnet --list-sdks
+dotnet clean .\MedicalDeviceSafetyPlatform.csproj
+dotnet restore .\MedicalDeviceSafetyPlatform.csproj
+dotnet build .\MedicalDeviceSafetyPlatform.csproj --no-restore
+dotnet run --project .\MedicalDeviceSafetyPlatform.csproj --urls http://localhost:5077
+```
+Install the .NET 8 SDK if needed, and do not delete the SQLite database or unrelated projects to resolve a build error. If the build still fails, copy the first compiler or MSBuild error.

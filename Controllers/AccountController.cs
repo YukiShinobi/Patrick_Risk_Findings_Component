@@ -38,9 +38,22 @@ public class AccountController : Controller
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginInput input)
     {
-        if (!ModelState.IsValid) return View(input);
+        if (!ModelState.IsValid)
+        {
+            if (input.FromLanding)
+            {
+                TempData["LandingLoginError"] = "Enter a valid email address and password.";
+                return RedirectToAction("Index", "Home");
+            }
+            return View(input);
+        }
         var result = await _signIn.PasswordSignInAsync(input.Email, input.Password, false, lockoutOnFailure: true);
         if (result.Succeeded) return LocalRedirect(Url.IsLocalUrl(input.ReturnUrl) ? input.ReturnUrl! : "/");
+        if (input.FromLanding)
+        {
+            TempData["LandingLoginError"] = "Invalid login credentials. Please try again.";
+            return RedirectToAction("Index", "Home");
+        }
         ModelState.AddModelError("", "Invalid login credentials.");
         return View(input);
     }
@@ -62,4 +75,5 @@ public class LoginInput
     [Required, EmailAddress] public string Email { get; set; } = "";
     [Required, DataType(DataType.Password)] public string Password { get; set; } = "";
     public string? ReturnUrl { get; set; }
+    public bool FromLanding { get; set; }
 }

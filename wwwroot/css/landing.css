@@ -294,3 +294,38 @@
 @media (max-width: 800px) and (prefers-reduced-motion: reduce) {
     .winters-login-form .winters-auth-panel { transform: none; }
 }
+
+/* Keep feedback readable and the mobile form in normal document flow. */
+.winters-login-error {
+    color: #ffe4e4;
+    background: rgba(137, 26, 41, .32);
+    border: 1px solid rgba(255, 190, 190, .46);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin: 0 0 16px;
+}
+.winters-auth-panel:focus-within, .winters-auth-panel:focus-within .winters-field,
+.winters-auth-panel:focus-within .winters-register { animation: none; }
+@media (min-width: 801px) {
+    .winters-landing { min-height: max(860px, 100svh); }
+}
+@media (max-width: 800px) {
+    .winters-landing {
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 120px 26px 24px;
+    }
+    .winters-welcome, .winters-auth-panel, .winters-bottom-action, .winters-footer {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        max-width: 540px;
+        margin: 0 auto;
+    }
+    .winters-auth-panel { transform: none; }
+    .winters-bottom-action { transform: none; max-width: 340px; }
+    .winters-footer { margin-top: auto; }
+}
