@@ -9,3 +9,6 @@ obj/
 # Unrelated local assistant projects must not be committed here.
 [Vv][Ee][Yy][Rr][Aa]*/
 node_modules/
+
+# Exclude nested clones of the separate Veyra repository.
+*[Vv][Ee][Yy][Rr][Aa]*/
